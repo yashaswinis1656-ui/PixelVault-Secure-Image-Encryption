@@ -1,0 +1,90 @@
+
+{% extends "base.html" %}
+
+{% block title %}Create account{% endblock %}
+
+{% block content %}
+<section class="auth-layout">
+    <div class="auth-story">
+        <div class="eyebrow"><span class="eyebrow-dot"></span> START WITH SECURITY</div>
+        <h1 class="story-title">Make privacy<br><span class="gradient-text">your default.</span></h1>
+        <p class="story-description">
+            Create your account and get a dedicated workspace for encrypting
+            and restoring images with your own encryption key.
+        </p>
+
+        <div class="register-benefits">
+            <div class="benefit-item">
+                <span class="benefit-icon">✦</span>
+                <div><strong>Modern encryption</strong><p>Protect image contents using AES-GCM.</p></div>
+            </div>
+            <div class="benefit-item">
+                <span class="benefit-icon">⌘</span>
+                <div><strong>Your key, your responsibility</strong><p>Keep your downloaded key in a safe place.</p></div>
+            </div>
+            <div class="benefit-item">
+                <span class="benefit-icon">◈</span>
+                <div><strong>One simple workspace</strong><p>Encrypt and decrypt supported image files.</p></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="auth-card">
+        <div class="card-icon"><span aria-hidden="true">✦</span></div>
+        <div class="eyebrow">CREATE YOUR ACCOUNT</div>
+        <h2>Join PixelVault</h2>
+        <p class="muted-text">Set up your secure workspace in a few steps.</p>
+
+        <form action="{{ url_for('register') }}" method="POST" class="form-stack">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+            <div class="form-group">
+                <label for="username">Username</label>
+                <div class="input-wrap">
+                    <span class="input-icon" aria-hidden="true">◎</span>
+                    <input id="username" type="text" name="username"
+                           placeholder="Choose a username" autocomplete="username"
+                           required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <div class="input-wrap">
+                    <span class="input-icon" aria-hidden="true">⌑</span>
+                    <input id="password" type="password" name="password"
+                           placeholder="Create a strong password" autocomplete="new-password"
+                           required>
+                    <button class="password-toggle" type="button"
+                            data-password-toggle="password" aria-label="Show password">Show</button>
+                </div>
+                <span class="field-hint">Choose a strong password you don't use elsewhere.</span>
+            </div>
+
+            <button class="button button-primary button-full button-tall" type="submit">
+                <span>Create secure account</span><span aria-hidden="true">→</span>
+            </button>
+        </form>
+
+        <div class="auth-switch">
+            Already registered? <a href="{{ url_for('login') }}">Log in</a>
+        </div>
+        <div class="card-security-note"><span class="tiny-lock">▣</span> Passwords are stored as hashes, not plain text.</div>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.querySelectorAll("[data-password-toggle]").forEach(function (button) {
+    button.addEventListener("click", function () {
+        const field = document.getElementById(button.dataset.passwordToggle);
+        if (!field) return;
+        const showing = field.type === "text";
+        field.type = showing ? "password" : "text";
+        button.textContent = showing ? "Show" : "Hide";
+        button.setAttribute("aria-label", showing ? "Show password" : "Hide password");
+    });
+});
+</script>
+{% endblock %}

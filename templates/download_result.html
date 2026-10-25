@@ -1,0 +1,51 @@
+```html
+{% extends "base.html" %}
+
+{% block title %}Encryption Complete{% endblock %}
+
+{% block content %}
+<section class="dashboard-page">
+    <div class="tool-card">
+        <div class="tool-card-top">
+            <div class="tool-icon encrypt-icon">🔐</div>
+            <span class="tool-label label-blue">ENCRYPTION COMPLETE</span>
+        </div>
+
+        <h1>Your image is <span class="gradient-text">protected.</span></h1>
+
+        <p class="tool-description">
+            Your image has been encrypted successfully using AES-256-GCM.
+            Download both files below.
+        </p>
+
+        <div class="security-strip">
+            <div class="strip-copy">
+                <strong>Encrypted image</strong>
+                <span>Contains encrypted image data.</span>
+            </div>
+            <a class="button button-primary"
+               href="{{ url_for('download_encrypted', token=token) }}">
+                Download image
+            </a>
+        </div>
+
+        <div class="security-strip">
+            <div class="strip-copy">
+                <strong>Encryption key</strong>
+                <span>Required to decrypt your image. Keep it safe.</span>
+            </div>
+            <a class="button button-secondary"
+               href="{{ url_for('download_key', token=token) }}">
+                Download key
+            </a>
+        </div>
+
+        <p class="tool-footnote">
+            Download both files before leaving this page. The key is provided separately.
+        </p>
+
+        <a href="{{ url_for('dashboard') }}">← Back to dashboard</a>
+    </div>
+</section>
+{% endblock %}
+```

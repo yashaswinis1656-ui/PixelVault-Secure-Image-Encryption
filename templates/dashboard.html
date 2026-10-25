@@ -1,0 +1,178 @@
+
+{% extends "base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<section class="dashboard-page">
+    <div class="dashboard-heading">
+        <div>
+            <div class="eyebrow"><span class="eyebrow-dot"></span> PRIVATE WORKSPACE</div>
+            <h1>Your security <span class="gradient-text">dashboard.</span></h1>
+            <p class="muted-text">Encrypt an image or restore one with its matching key.</p>
+        </div>
+        <div class="dashboard-status">
+            <span class="status-ring"><span class="status-dot"></span></span>
+            <div><strong>Workspace ready</strong><span>Encryption tools available</span></div>
+        </div>
+    </div>
+
+    <div class="security-strip">
+        <div class="strip-icon">⬡</div>
+        <div class="strip-copy">
+            <strong>Built for image privacy</strong>
+            <span>AES-256-GCM provides encryption and authentication for your image data.</span>
+        </div>
+        <span class="strip-badge">AES-GCM</span>
+    </div>
+
+    <div class="tool-grid">
+        <section class="tool-card encrypt-card">
+            <div class="tool-card-top">
+                <div class="tool-icon encrypt-icon">
+                    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <rect x="4" y="10" width="16" height="11" rx="3"
+                              stroke="currentColor" stroke-width="1.7"/>
+                        <path d="M8 10V7a4 4 0 0 1 8 0v3"
+                              stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+                        <path d="M12 14v3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+                    </svg>
+                </div>
+                <span class="tool-label label-blue">ENCRYPTION</span>
+            </div>
+
+            <h2>Encrypt an image</h2>
+            <p class="tool-description">Turn a supported image into encrypted data and download its separate key.</p>
+
+            <div class="process-steps">
+                <span><b>01</b> Select image</span>
+                <span class="step-arrow">→</span>
+                <span><b>02</b> Encrypt</span>
+                <span class="step-arrow">→</span>
+                <span><b>03</b> Save key</span>
+            </div>
+
+            <form action="{{ url_for('encrypt_image') }}" method="POST"
+                  enctype="multipart/form-data" class="form-stack">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+                <label class="drop-zone" for="image">
+                    <span class="upload-graphic">
+                        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                            <rect x="3" y="4" width="18" height="16" rx="3"
+                                  stroke="currentColor" stroke-width="1.6"/>
+                            <circle cx="8.5" cy="9" r="1.5" stroke="currentColor" stroke-width="1.6"/>
+                            <path d="m4 17 5-5 3.5 3 2.5-2 5 5"
+                                  stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </span>
+                    <strong>Choose an image to protect</strong>
+                    <span class="drop-hint">Click here to browse your files</span>
+                    <span class="file-chip" id="image-file-name">PNG, JPG, JPEG, BMP or WEBP</span>
+                    <input id="image" type="file" name="image"
+                           accept=".png,.jpg,.jpeg,.bmp,.webp" required>
+                </label>
+
+                <button class="button button-primary button-full button-tall" type="submit">
+                    <span>Encrypt image</span><span aria-hidden="true">→</span>
+                </button>
+            </form>
+
+            <div class="tool-footnote"><span>✦</span> Keep the downloaded key separate from the encrypted image.</div>
+        </section>
+
+        <section class="tool-card decrypt-card">
+            <div class="tool-card-top">
+                <div class="tool-icon decrypt-icon">
+                    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <rect x="4" y="10" width="16" height="11" rx="3"
+                              stroke="currentColor" stroke-width="1.7"/>
+                        <path d="M8 10V7a4 4 0 0 1 7.6-1.8"
+                              stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+                        <path d="m10 15 2 2 4-4" stroke="currentColor"
+                              stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <span class="tool-label label-purple">DECRYPTION</span>
+            </div>
+
+            <h2>Restore an image</h2>
+            <p class="tool-description">Upload the encrypted file and its original matching key to restore your image.</p>
+
+            <div class="process-steps">
+                <span><b>01</b> Select file</span>
+                <span class="step-arrow">→</span>
+                <span><b>02</b> Add key</span>
+                <span class="step-arrow">→</span>
+                <span><b>03</b> Restore</span>
+            </div>
+
+            <form action="{{ url_for('decrypt_image') }}" method="POST"
+                  enctype="multipart/form-data" class="form-stack">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+                <label class="upload-field" for="encrypted_file">
+                    <span class="file-type-icon">▧</span>
+                    <span class="upload-field-copy">
+                        <strong>Encrypted image file</strong>
+                        <span id="encrypted-file-name">Choose your encrypted file</span>
+                    </span>
+                    <span class="browse-label">Browse</span>
+                    <input id="encrypted_file" type="file" name="encrypted_file" required>
+                </label>
+
+                <label class="upload-field" for="key_file">
+                    <span class="file-type-icon key-file-icon">⚿</span>
+                    <span class="upload-field-copy">
+                        <strong>Encryption key file</strong>
+                        <span id="key-file-name">Choose the matching key</span>
+                    </span>
+                    <span class="browse-label">Browse</span>
+                    <input id="key_file" type="file" name="key_file" required>
+                </label>
+
+                <button class="button button-secondary button-full button-tall" type="submit">
+                    <span>Decrypt image</span><span aria-hidden="true">→</span>
+                </button>
+            </form>
+
+            <div class="tool-footnote"><span>✦</span> The original matching key is required to restore the image.</div>
+        </section>
+    </div>
+
+    <div class="dashboard-bottom">
+        <div class="bottom-icon">i</div>
+        <div>
+            <strong>Protect your encryption key</strong>
+            <p>If you lose the key, you may not be able to recover the original image. Never share your key with untrusted people.</p>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function displaySelectedFile(inputId, outputId, defaultText) {
+    const input = document.getElementById(inputId);
+    const output = document.getElementById(outputId);
+
+    if (!input || !output) return;
+
+    input.addEventListener("change", function () {
+        if (input.files && input.files.length > 0) {
+            output.textContent = input.files[0].name;
+            output.classList.add("file-selected");
+            output.title = input.files[0].name;
+        } else {
+            output.textContent = defaultText;
+            output.classList.remove("file-selected");
+            output.removeAttribute("title");
+        }
+    });
+}
+
+displaySelectedFile("image", "image-file-name", "PNG, JPG, JPEG, BMP or WEBP");
+displaySelectedFile("encrypted_file", "encrypted-file-name", "Choose your encrypted file");
+displaySelectedFile("key_file", "key-file-name", "Choose the matching key");
+</script>
+{% endblock %}

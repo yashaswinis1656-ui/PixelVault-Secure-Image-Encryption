@@ -1,0 +1,106 @@
+
+{% extends "base.html" %}
+
+{% block title %}Log in{% endblock %}
+
+{% block content %}
+<section class="auth-layout">
+    <div class="auth-story">
+        <div class="eyebrow"><span class="eyebrow-dot"></span> YOUR PRIVATE IMAGE VAULT</div>
+        <h1 class="story-title">Your images.<br><span class="gradient-text">Your control.</span></h1>
+        <p class="story-description">
+            Protect your personal images with authenticated encryption.
+            Simple to use. Designed with privacy in mind.
+        </p>
+
+        <div class="security-visual">
+            <div class="orbit orbit-one"></div>
+            <div class="orbit orbit-two"></div>
+            <div class="visual-shield">
+                <svg viewBox="0 0 100 100" fill="none" aria-hidden="true">
+                    <path d="M50 8 83 21v24c0 22-14 37-33 47C31 82 17 67 17 45V21L50 8Z"
+                          fill="url(#shieldGradient)" fill-opacity=".16"
+                          stroke="url(#shieldGradient)" stroke-width="2.5"/>
+                    <rect x="34" y="43" width="32" height="25" rx="6"
+                          stroke="#A5B4FC" stroke-width="2.5"/>
+                    <path d="M41 43v-7a9 9 0 0 1 18 0v7"
+                          stroke="#A5B4FC" stroke-width="2.5" stroke-linecap="round"/>
+                    <circle cx="50" cy="54" r="3" fill="#C4B5FD"/>
+                    <path d="M50 57v4" stroke="#C4B5FD" stroke-width="2.5" stroke-linecap="round"/>
+                    <defs>
+                        <linearGradient id="shieldGradient" x1="17" y1="8" x2="83" y2="96">
+                            <stop stop-color="#38BDF8"/>
+                            <stop offset="1" stop-color="#A78BFA"/>
+                        </linearGradient>
+                    </defs>
+                </svg>
+            </div>
+            <div class="floating-chip chip-top"><span class="chip-check">✓</span> AES-256-GCM</div>
+            <div class="floating-chip chip-bottom"><span class="status-dot"></span> Authenticated encryption</div>
+        </div>
+
+        <div class="feature-row">
+            <div class="feature-mini"><span>01</span> Private keys</div>
+            <div class="feature-mini"><span>02</span> Image protection</div>
+            <div class="feature-mini"><span>03</span> Secure sessions</div>
+        </div>
+    </div>
+
+    <div class="auth-card">
+        <div class="card-icon"><span aria-hidden="true">↗</span></div>
+        <div class="eyebrow">WELCOME BACK</div>
+        <h2>Access your vault</h2>
+        <p class="muted-text">Log in to continue to your secure workspace.</p>
+
+        <form action="{{ url_for('login') }}" method="POST" class="form-stack">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+            <div class="form-group">
+                <label for="username">Username</label>
+                <div class="input-wrap">
+                    <span class="input-icon" aria-hidden="true">◎</span>
+                    <input id="username" type="text" name="username"
+                           placeholder="Enter your username" autocomplete="username"
+                           required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <div class="input-wrap">
+                    <span class="input-icon" aria-hidden="true">⌑</span>
+                    <input id="password" type="password" name="password"
+                           placeholder="Enter your password" autocomplete="current-password"
+                           required>
+                    <button class="password-toggle" type="button"
+                            data-password-toggle="password" aria-label="Show password">Show</button>
+                </div>
+            </div>
+
+            <button class="button button-primary button-full button-tall" type="submit">
+                <span>Log in securely</span><span aria-hidden="true">→</span>
+            </button>
+        </form>
+
+        <div class="auth-switch">
+            Don't have an account? <a href="{{ url_for('register') }}">Create one</a>
+        </div>
+        <div class="card-security-note"><span class="tiny-lock">▣</span> Your account is protected by password hashing.</div>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.querySelectorAll("[data-password-toggle]").forEach(function (button) {
+    button.addEventListener("click", function () {
+        const field = document.getElementById(button.dataset.passwordToggle);
+        if (!field) return;
+        const showing = field.type === "text";
+        field.type = showing ? "password" : "text";
+        button.textContent = showing ? "Show" : "Hide";
+        button.setAttribute("aria-label", showing ? "Show password" : "Hide password");
+    });
+});
+</script>
+{% endblock %}
